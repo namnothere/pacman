@@ -1,0 +1,32 @@
+[gd_scene load_steps=5 format=3 uid="uid://dun4vaxonytqy"]
+
+[ext_resource type="Script" path="res://scripts/pellet.gd" id="1_lxfqx"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_c1f7r"]
+backlight_enabled = true
+backlight = Color(0.890196, 0.917647, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_erjv3"]
+material = SubResource("StandardMaterial3D_c1f7r")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_j3ru0"]
+
+[node name="pellet" type="Node3D"]
+script = ExtResource("1_lxfqx")
+
+[node name="PelletNewMeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_erjv3")
+
+[node name="PalletStaticBody3D" type="StaticBody3D" parent="PelletNewMeshInstance3D"]
+collision_layer = 16
+collision_mask = 31
+
+[node name="PalletCollisionShape3D" type="CollisionShape3D" parent="PelletNewMeshInstance3D/PalletStaticBody3D"]
+shape = SubResource("BoxShape3D_j3ru0")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="AreaColiisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("BoxShape3D_j3ru0")
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]

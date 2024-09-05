@@ -1,0 +1,13 @@
+[gd_scene load_steps=4 format=3 uid="uid://w28tbsdlxm0k"]
+
+[ext_resource type="PackedScene" uid="uid://cskw0x80h34o4" path="res://scenes/wall.tscn" id="1_0cvok"]
+[ext_resource type="NoiseTexture3D" uid="uid://bt3doki82wrca" path="res://assets/noises/pellet.tres" id="3_l3xqn"]
+[ext_resource type="PackedScene" uid="uid://dun4vaxonytqy" path="res://scenes/pellet.tscn" id="3_qjc1m"]
+
+[node name="tiles" type="Node3D"]
+
+[node name="wall" parent="." instance=ExtResource("1_0cvok")]
+
+[node name="pellet" parent="." instance=ExtResource("3_qjc1m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.48747, 0, 0)
+noise = ExtResource("3_l3xqn")

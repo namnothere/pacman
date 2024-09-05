@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://cskw0x80h34o4"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_s0lf3"]
+size = Vector3(1, 5, 1)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_8p3f1"]
+points = PackedVector3Array(-0.5, -2.5, -0.5, -0.5, -2.5, 0.5, -0.5, 2.5, -0.5, 0.5, -2.5, -0.5, 0.5, -2.5, 0.5, -0.5, 2.5, 0.5, 0.5, 2.5, -0.5, 0.5, 2.5, 0.5)
+
+[node name="wall" type="Node3D"]
+
+[node name="WallMeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_s0lf3")
+
+[node name="WallStaticBody3D" type="StaticBody3D" parent="WallMeshInstance3D"]
+collision_layer = 8
+collision_mask = 15
+
+[node name="WallCollisionShape3D" type="CollisionShape3D" parent="WallMeshInstance3D/WallStaticBody3D"]
+shape = SubResource("ConvexPolygonShape3D_8p3f1")
