@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_tx6vb"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vavwu"]
+albedo_color = Color(1, 1, 0.141176, 1)
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_r1fcm"]
 _surfaces = [{
@@ -53,6 +54,7 @@ skeleton = NodePath("")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.84822, -1.84808)
+keep_aspect = 0
 current = true
 fov = 120.0
 
@@ -68,3 +70,5 @@ light_indirect_energy = 2.0
 light_size = 1.0
 spot_range = 15.0
 spot_angle = 34.545
+
+[node name="Score" type="Node" parent="."]

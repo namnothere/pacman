@@ -17,6 +17,6 @@ func _process(delta: float) -> void:
 	position.x = origin_pos.x + sample_noise * 5
 	position.y = origin_pos.y + sample_noise * 10
 
-func _on_area_3d_body_entered(body: Node3D) -> void:
-	emit_signal('coin_collected', 1)
+func _on_area_3d_body_entered(_body: Node3D) -> void:
+	print("Scored")
 	queue_free()

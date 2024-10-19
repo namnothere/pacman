@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://c2gqvbg0q7hg"
-path="res://.godot/imported/lowpoly_pacman.glb-8f72dccbcb2533dc6338f67ae0347d6e.scn"
+path="res://.godot/imported/lowpoly_pacman.glb-c3b7b60fdd54e652b05531a443b2e55f.scn"
 
 [deps]
 
-source_file="res://assets/models/lowpoly_pacman.glb"
-dest_files=["res://.godot/imported/lowpoly_pacman.glb-8f72dccbcb2533dc6338f67ae0347d6e.scn"]
+source_file="res://assets/models/lowpoly_pacman/lowpoly_pacman.glb"
+dest_files=["res://.godot/imported/lowpoly_pacman.glb-c3b7b60fdd54e652b05531a443b2e55f.scn"]
 
 [params]
 
