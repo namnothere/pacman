@@ -54,7 +54,6 @@ skeleton = NodePath("")
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.84822, -1.84808)
 keep_aspect = 0
-current = true
 fov = 120.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

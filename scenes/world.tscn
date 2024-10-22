@@ -9,11 +9,11 @@
 [ext_resource type="Script" path="res://scripts/grid_map_pellet.gd" id="7_0efb2"]
 [ext_resource type="PackedScene" uid="uid://blqjcjq7xnw0e" path="res://scenes/hud.tscn" id="7_6yoxx"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_40yl8"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xywhx"]
 albedo_texture = ExtResource("1_p77j0")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_4cmpn"]
-material = SubResource("StandardMaterial3D_40yl8")
+material = SubResource("StandardMaterial3D_xywhx")
 size = Vector2(100, 100)
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_msdpp"]
