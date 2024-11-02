@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://c210cgj1qdpu3"]
 
 [ext_resource type="Script" path="res://addons/wfc/nodes/generator_2d.gd" id="1_xdkoh"]
-[ext_resource type="MeshLibrary" uid="uid://cefswv2bfsp01" path="res://assets/gridmap/tiles.tres" id="2_d61d7"]
-[ext_resource type="MeshLibrary" uid="uid://cqtxmliw007w7" path="res://tiles.tres" id="2_s341l"]
+[ext_resource type="MeshLibrary" uid="uid://cqtxmliw007w7" path="res://assets/gridmap/tiles.tres" id="2_d61d7"]
+[ext_resource type="MeshLibrary" uid="uid://cqtxmliw007w7" path="res://assets/gridmap/tiles.tres" id="2_s341l"]
 
 [node name="MapGenerator" type="Node"]
 

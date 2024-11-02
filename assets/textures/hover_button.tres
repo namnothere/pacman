@@ -1,0 +1,8 @@
+[gd_resource type="StyleBoxTexture" load_steps=2 format=3 uid="uid://cw1wulfqt8qd1"]
+
+[ext_resource type="Texture2D" uid="uid://ggyvunb75nyq" path="res://assets/Brick Wall/BrickWall_Albedo.tga" id="1_ig7hi"]
+
+[resource]
+texture = ExtResource("1_ig7hi")
+region_rect = Rect2(127, 326, 467, 250)
+modulate_color = Color(0.412152, 0.412152, 0.412152, 1)

@@ -5,6 +5,8 @@ var center_x: int
 var center_y: int
 var DIRECTIONS = [Vector2(0, -2), Vector2(0, 2), Vector2(-2, 0), Vector2(2, 0)]
 
+const FLOOR: int = 0
+const WALL: int = 1
 @export var MAP_SIZE: int = 25
 @onready var grid_map: GridMap = $GridMap_Maze
 
@@ -24,7 +26,7 @@ func init_map():
 	for i in range(MAP_SIZE):
 		var _row: Array = []
 		_row.resize(MAP_SIZE)
-		_row.fill(1)
+		_row.fill(WALL)
 		grid.append(_row)
 
 	center_x = MAP_SIZE / 2 + 1
@@ -75,7 +77,6 @@ func dfs_maze_generate(start_x: int = 0, start_y: int = 0):
 			stack.append(next)
 		else:
 			stack.pop_back()
-	#print(grid)
 
 func is_valid_move(x: int, y: int):
 	return x >= 0 and x < MAP_SIZE and y >= 0 and y < MAP_SIZE and grid[y][x] == 1

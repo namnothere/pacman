@@ -8,6 +8,8 @@ const JUMP_VELOCITY = 4.5
 var camera: Camera3D
 var mouse_sensitivity: float = 0.001
 var camera_rotation: Vector2 = Vector2(0.0,0.0)
+var is_moving: bool = false
+var move_direction: Vector3
 
 @export var camera_lock: Camera3D
 @onready var visual: MeshInstance3D = $LowPoly_PacMan
@@ -20,6 +22,12 @@ func _input(event: InputEvent):
 	if event is InputEventMouseMotion and camera_lock.current == false:
 		var MouseEvent = event.relative * mouse_sensitivity
 		camera_look(MouseEvent)
+		return
+	var input_dir := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+	if input_dir:
+		move_direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	if move_direction:
+		is_moving = true
 
 func camera_look(Movement: Vector2) -> void:
 	camera_rotation += Movement
@@ -35,14 +43,12 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
+	#if Input.is_action_just_pressed("ui_accept") and is_on_floor():
+		#velocity.y = JUMP_VELOCITY
 
-	var input_dir := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
-	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-	if direction:
-		velocity.x = direction.x * SPEED
-		velocity.z = direction.z * SPEED
+	if move_direction and is_moving == true:
+		velocity.x = move_direction.x * SPEED
+		velocity.z = move_direction.z * SPEED
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
