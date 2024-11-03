@@ -8,14 +8,16 @@ var DIRECTIONS = [Vector2(0, -2), Vector2(0, 2), Vector2(-2, 0), Vector2(2, 0)]
 const FLOOR: int = 0
 const WALL: int = 1
 @export var MAP_SIZE: int = 25
+@export var is_auto_map: bool = true
 @onready var grid_map: GridMap = $GridMap_Maze
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	grid_map.clear()
-	init_map()
-	dfs_maze_generate()
-	generate_grid()
+	if is_auto_map:
+		grid_map.clear()
+		init_map()
+		dfs_maze_generate()
+		generate_grid()
 	#var cells = grid_map.get_used_cells_by_item(0)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

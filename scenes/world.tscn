@@ -1,57 +1,59 @@
-[gd_scene load_steps=8 format=3 uid="uid://cyhnd24apl58c"]
+[gd_scene load_steps=8 format=3 uid="uid://cog78f02vj14m"]
 
-[ext_resource type="PackedScene" uid="uid://chu8rojcgdmi7" path="res://scenes/player.tscn" id="1_eeits"]
 [ext_resource type="Script" path="res://scripts/auto_grid_map.gd" id="1_w4m4e"]
-[ext_resource type="MeshLibrary" uid="uid://cqtxmliw007w7" path="res://assets/gridmap/tiles.tres" id="4_qwq84"]
+[ext_resource type="PackedScene" uid="uid://chu8rojcgdmi7" path="res://scenes/player.tscn" id="5_ag221"]
+[ext_resource type="MeshLibrary" uid="uid://cqtxmliw007w7" path="res://assets/gridmap/tiles.tres" id="6_xgnff"]
+[ext_resource type="PackedScene" uid="uid://blqjcjq7xnw0e" path="res://scenes/hud.tscn" id="8_hag2m"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yjkx0"]
-albedo_color = Color(0.136826, 0.136826, 0.136826, 1)
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_b261c"]
-material = SubResource("StandardMaterial3D_yjkx0")
+[sub_resource type="PlaneMesh" id="PlaneMesh_3fl2i"]
 size = Vector2(100, 100)
 
-[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_mgrey"]
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_msdpp"]
 points = PackedVector3Array(-50, 0, -50, -50, 0, 50, 50, 0, -50, 50, 0, 50)
 
-[sub_resource type="Environment" id="Environment_g0367"]
+[sub_resource type="Environment" id="Environment_0exhu"]
 background_mode = 3
 
-[node name="World" type="Node3D"]
+[node name="world" type="Node3D"]
 script = ExtResource("1_w4m4e")
 
-[node name="GridMap_Maze" type="GridMap" parent="."]
-mesh_library = ExtResource("4_qwq84")
-cell_size = Vector3(4, 8, 4)
-cell_scale = 4.0
-collision_mask = 15
-metadata/_editor_floor_ = Vector3(0, 0, 0)
+[node name="Floor" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_3fl2i")
+skeleton = NodePath("")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Floor"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor/StaticBody3D"]
+shape = SubResource("ConvexPolygonShape3D_msdpp")
+
+[node name="player" parent="." node_paths=PackedStringArray("top_down_camera") instance=ExtResource("5_ag221")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 2, 4, -1.77804)
+axis_lock_linear_y = true
+safe_margin = 0.05
+top_down_camera = NodePath("../TopDownCamera")
 
 [node name="TopDownCamera" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 50, 0)
 keep_aspect = 0
 projection = 1
-current = true
 fov = 106.3
-size = 180.634
+size = 175.993
 
-[node name="player" parent="." node_paths=PackedStringArray("camera_lock") instance=ExtResource("1_eeits")]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 3.98686, 38.6899)
-collision_mask = 7
-camera_lock = NodePath("../TopDownCamera")
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -0.5, 0.866025, 0, -0.866025, -0.5, 0, 0, 0)
-
-[node name="Floor" type="MeshInstance3D" parent="."]
-mesh = SubResource("PlaneMesh_b261c")
-skeleton = NodePath("")
-
-[node name="StaticBody3D" type="StaticBody3D" parent="Floor"]
+[node name="GridMap_Maze" type="GridMap" parent="."]
+mesh_library = ExtResource("6_xgnff")
+cell_size = Vector3(4, 1, 4)
+cell_scale = 4.0
+collision_layer = 31
 collision_mask = 15
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor/StaticBody3D"]
-shape = SubResource("ConvexPolygonShape3D_mgrey")
+data = {
+"cells": PackedInt32Array(65532, 65533, 0, 65533, 65533, 0, 65534, 65533, 0, 65535, 65533, 0, 0, 65533, 0, 1, 65533, 0, 1, 65534, 0, 2, 65534, 0, 3, 65534, 0, 4, 65534, 0, 65532, 65531, 0, 65533, 65531, 0, 65534, 65531, 0, 65534, 65530, 0, 65535, 65531, 0, 0, 65531, 0, 1, 65531, 0, 2, 65531, 0, 3, 65531, 0, 3, 65532, 0, 4, 65532, 0, 5, 65532, 0, 6, 65532, 0, 6, 65533, 0, 6, 65534, 0, 5, 65534, 0, 65535, 65535, 0, 1, 65535, 0)
+}
+metadata/_editor_floor_ = Vector3(0, 0, 0)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_g0367")
+environment = SubResource("Environment_0exhu")
+
+[node name="HUD" parent="." instance=ExtResource("8_hag2m")]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -0.5, 0.866025, 0, -0.866025, -0.5, 0, 40.3264, 0)

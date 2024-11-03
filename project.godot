@@ -19,6 +19,12 @@ config/icon="res://assets/icon.svg"
 
 Signals="*res://scripts/signals.gd"
 
+[display]
+
+window/size/resizable=false
+window/stretch/mode="canvas_items"
+window/stretch/aspect="ignore"
+
 [dotnet]
 
 project/assembly_name="pacman"
@@ -74,3 +80,6 @@ ui_down={
 3d_physics/layer_3="enemies"
 3d_physics/layer_4="wall"
 3d_physics/layer_5="pellet"
+3d_render/size/resizable=true
+3d_render/stretch/mode="disabled"
+3d_render/stretch/aspect="keep"
