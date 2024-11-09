@@ -44,7 +44,7 @@ func camera_look(Movement: Vector2) -> void:
 	rotate_object_local(Vector3(0,1,0),-camera_rotation.x)
 	character_camera.rotate_object_local(Vector3(1,0,0), -camera_rotation.y)
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	# Add the gravity only when in first person view.
 	#if not is_on_floor() and is_first_person == true:
 		#velocity += get_gravity() * delta
