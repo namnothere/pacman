@@ -1,8 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://c210cgj1qdpu3"]
+[gd_scene load_steps=3 format=3 uid="uid://c210cgj1qdpu3"]
 
 [ext_resource type="Script" path="res://addons/wfc/nodes/generator_2d.gd" id="1_xdkoh"]
 [ext_resource type="MeshLibrary" uid="uid://cqtxmliw007w7" path="res://assets/gridmap/tiles.tres" id="2_d61d7"]
-[ext_resource type="MeshLibrary" uid="uid://cqtxmliw007w7" path="res://assets/gridmap/tiles.tres" id="2_s341l"]
 
 [node name="MapGenerator" type="Node"]
 
@@ -14,7 +13,7 @@ positive_sample = NodePath("../GridMap_Maze")
 start_on_ready = true
 
 [node name="GridMap_Maze" type="GridMap" parent="."]
-mesh_library = ExtResource("2_s341l")
+mesh_library = ExtResource("2_d61d7")
 cell_size = Vector3(1, 1, 1)
 cell_scale = 2.0
 collision_layer = 31

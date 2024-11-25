@@ -18,7 +18,7 @@ uv1_scale = Vector3(3, 3, 3)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_3fl2i"]
 material = SubResource("StandardMaterial3D_i8lf1")
-size = Vector2(100, 100)
+size = Vector2(105, 105)
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_msdpp"]
 points = PackedVector3Array(-50, 0, -50, -50, 0, 50, 50, 0, -50, 50, 0, 50)
@@ -50,12 +50,14 @@ keep_aspect = 0
 projection = 1
 current = true
 fov = 106.3
-size = 175.993
+size = 190.0
+metadata/_edit_lock_ = true
 
 [node name="GridMap_Maze" type="GridMap" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, 2.5)
 mesh_library = ExtResource("6_xgnff")
-cell_size = Vector3(4, 1, 4)
-cell_scale = 4.0
+cell_size = Vector3(5, 0.5, 5)
+cell_scale = 5.0
 collision_layer = 31
 collision_mask = 15
 metadata/_editor_floor_ = Vector3(0, 0, 0)

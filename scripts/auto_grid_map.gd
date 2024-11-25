@@ -8,10 +8,13 @@ var DIRECTIONS = [Vector2(0, -2), Vector2(0, 2), Vector2(-2, 0), Vector2(2, 0)]
 const FLOOR: int = -1
 const WALL: int = 0
 const PELLET: int = 1
-@export var MAP_SIZE: int = 25
+const CHARACTER_SCALE: int = 4
+
+@export var MAP_SIZE: int = 21
 @export var is_auto_map: bool = true
 @onready var grid_map: GridMap = $GridMap_Maze
 @onready var player: CharacterBody3D = $player
+@onready var topdowncamera: Camera3D = $TopDownCamera
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	if is_auto_map:
@@ -21,6 +24,9 @@ func _ready() -> void:
 		generate_grid()
 		spawn_pellets()
 		spawn_player_at_random()
+		
+	if topdowncamera.current == true:
+		player.scale = Vector3(CHARACTER_SCALE, CHARACTER_SCALE, CHARACTER_SCALE)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
@@ -124,7 +130,7 @@ func spawn_pellets():
 		
 		var logical_x = pellet_cell.x - center_x
 		var logical_y = pellet_cell.y - center_y
-		
+
 		grid_map.set_cell_item(Vector3(logical_x, 0, logical_y), PELLET)
 		
 	print("Spawned pellets in ", num_pellets, " cells out of ", empty_cells.size())
