@@ -18,6 +18,7 @@ config/icon="res://assets/icon.svg"
 [autoload]
 
 Signals="*res://scripts/signals.gd"
+Solver="*res://scripts/solver.gd"
 
 [display]
 

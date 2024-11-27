@@ -15,6 +15,7 @@ var is_moving: bool = false
 var move_direction: Vector3
 
 var is_first_person: bool = false
+var is_auto: bool = true
 
 
 func _ready() -> void:
@@ -28,9 +29,10 @@ func _input(event: InputEvent):
 	if event is InputEventMouseMotion and is_first_person == true:
 		var MouseEvent = event.relative * mouse_sensitivity
 		camera_look(MouseEvent)
-		#return
+	
+	
 	var input_dir := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
-	if input_dir:
+	if input_dir and is_auto == false:
 		move_direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if move_direction and is_first_person == false:
 		is_moving = true
