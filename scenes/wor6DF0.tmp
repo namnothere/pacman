@@ -39,7 +39,7 @@ skeleton = NodePath("")
 shape = SubResource("ConvexPolygonShape3D_msdpp")
 
 [node name="player" parent="." node_paths=PackedStringArray("top_down_camera") instance=ExtResource("5_ag221")]
-transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 2, 4, -1.77804)
 axis_lock_linear_y = true
 safe_margin = 0.05
 top_down_camera = NodePath("../TopDownCamera")
@@ -58,7 +58,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, 2.5)
 mesh_library = ExtResource("6_xgnff")
 cell_size = Vector3(5, 0.5, 5)
 cell_scale = 5.0
-collision_layer = 29
+collision_layer = 31
 collision_mask = 15
 metadata/_editor_floor_ = Vector3(0, 0, 0)
 

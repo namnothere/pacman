@@ -12,10 +12,11 @@ const PLAYER: int = 2
 const CHARACTER_SCALE: int = 4
 var tween: Tween
 
-@export var MAP_SIZE: int = 5
+@export var MAP_SIZE: int = 11
 @export var is_auto_map: bool = true
 @export var PELLET_SPAWN_RATIO: float = 0.04
 @export var MIN_PELLET_SPAWN: int = 1
+@export var ANIMATION_SPEED: float = 1.0
 
 @onready var grid_map: GridMap = $GridMap_Maze
 @onready var player: CharacterBody3D = $player
@@ -23,7 +24,6 @@ var tween: Tween
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	Signals.connect("found_solution", _on_found_solution)
-	tween  = get_tree().create_tween()
 	if is_auto_map:
 		grid_map.clear()
 		init_map()
@@ -159,24 +159,57 @@ func spawn_pellets():
 	return pellet_map
 
 func move_to_next_step(steps_array):
-	#var steps_array = [[9,0]]
+	print("steps_array: ", steps_array)
+	if tween:
+		tween.kill()
 	if steps_array.size() > 0:
 		var current_step = steps_array[0]
+		tween = get_tree().create_tween()
+		#var local_position = grid_map.map_to_local(Vector3i(current_step[1] - center_y, 0, current_step[0] - center_x))
 		
-		# Convert to world position
-		var local_position = grid_map.map_to_local(Vector3(current_step[0], 0, current_step[1]))
-		var world_position = grid_map.to_global(local_position)
+		var vector = Vector3(current_step[1] - center_y, 0, current_step[0] - center_x);
+		var local_position = Vector3(Vector3i(grid_map.map_to_local(vector)));
 		
-		tween.tween_property(player, "global_transform/origin", world_position, 1.0).as_relative().set_ease(Tween.EASE_IN_OUT);
-		
-		player.global_transform.origin = world_position
-		
+		print(local_position)
+		tween.tween_property(player, "position", local_position, ANIMATION_SPEED).set_trans(Tween.TRANS_LINEAR)
+		#
+		#await tween.finished
+		await get_tree().create_timer(ANIMATION_SPEED).timeout
+		player.global_position = local_position
 		steps_array.remove_at(0)
-		
-		move_to_next_step(steps_array)
+		await move_to_next_step(steps_array)
 	else:
 		print("Character has reached the goal!")
 
 func _on_found_solution(solution):
-	#move_to_next_step(solution)
+	#player.set_pivot_offset(Vector3(0, 0, 0))
+	solution = unique_array(solution)
+	#if len(solution) > 8:
+		#ANIMATION_SPEED = 8 / len(solution)
+	#else: ANIMATION_SPEED = 1
+	print(solution)
+	var current_step = [5, 1]
+	print(player.position)
+	#var local_position = Vector3(Vector3i(grid_map.map_to_local(Vector3i(current_step[1] - center_y, 0, current_step[0] - center_x))))
+	#if tween:
+		#tween.kill()
+	#tween = get_tree().create_tween()
+	#tween.tween_property(player, "position", local_position, ANIMATION_SPEED).set_trans(Tween.TRANS_LINEAR)
+	#var target_position = Vector3(5, 0, 5)  
+	#var offset = player.position
+	#var adjusted_position = target_position - offset
+	
+	#await tween.finished
+	
+	#print(player.position)
+	#
+	#tween.tween_property(player, "global_position", adjusted_position, 0.5).set_trans(Tween.TRANS_LINEAR)
+
+	move_to_next_step(solution)
 	pass
+
+func unique_array(arr: Array) -> Array:
+	var dict := {}
+	for a in arr:
+		dict[a] = 1
+	return dict.keys()
