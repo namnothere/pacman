@@ -30,6 +30,7 @@ text = "0
 horizontal_alignment = 2
 
 [node name="Solution" type="Label" parent="."]
+visible = false
 offset_left = 27.0
 offset_top = 111.0
 offset_right = 109.0

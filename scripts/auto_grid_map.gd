@@ -12,11 +12,12 @@ const PLAYER: int = 2
 const CHARACTER_SCALE: int = 4
 var tween: Tween
 
-@export var MAP_SIZE: int = 11
+@export var MAP_SIZE: int = 9
 @export var is_auto_map: bool = true
 @export var PELLET_SPAWN_RATIO: float = 0.04
-@export var MIN_PELLET_SPAWN: int = 1
-@export var ANIMATION_SPEED: float = 1.0
+@export var MIN_PELLET_SPAWN: int = 3
+@export var ANIMATION_SPEED: float = 0.35
+@export var MAX_ANIMATION_SPEED: float = 0.6
 
 @onready var grid_map: GridMap = $GridMap_Maze
 @onready var player: CharacterBody3D = $player
@@ -160,7 +161,7 @@ func spawn_pellets():
 	return pellet_map
 
 func move_to_next_step(steps_array):
-	print("steps_array: ", steps_array)
+	#print("steps_array: ", steps_array)
 	if tween:
 		tween.kill()
 	if steps_array.size() > 0:
@@ -168,13 +169,15 @@ func move_to_next_step(steps_array):
 		tween = get_tree().create_tween()
 		#var local_position = grid_map.map_to_local(Vector3i(current_step[1] - center_y, 0, current_step[0] - center_x))
 		
+		print("Moving to ", current_step);
+		
 		#var vector = Vector3(current_step[1] - center_y, 0, current_step[0] - center_x);
 		var vector = Vector3(current_step[1] - center_x + 1, 0.25, current_step[0] - center_y + 1);
 		#var vector = Vector3(0, 0, 0);
 		var local_position = Vector3(Vector3i(grid_map.map_to_local(vector)));
 		
 		local_position.x = local_position.x - grid_map.cell_size.x / 2;
-		local_position.z = int(local_position.z - grid_map.cell_size.y / 2);
+		local_position.z = int(local_position.z - grid_map.cell_size.z / 2);
 		
 		tween.tween_property(player, "position", local_position, ANIMATION_SPEED).set_trans(Tween.TRANS_LINEAR)
 		#
@@ -187,28 +190,16 @@ func move_to_next_step(steps_array):
 		print("Character has reached the goal!")
 
 func _on_found_solution(solution):
-	#player.set_pivot_offset(Vector3(0, 0, 0))
-	solution = unique_array(solution)
-	#if len(solution) > 8:
-		#ANIMATION_SPEED = 8 / len(solution)
-	#else: ANIMATION_SPEED = 1
-	#print(solution)
-	#var current_step = [5, 1]
-	#print(player.position)
-	#var local_position = Vector3(Vector3i(grid_map.map_to_local(Vector3i(current_step[1] - center_y, 0, current_step[0] - center_x))))
+	#solution = unique_array(solution)
+	print("Steps: ", len(solution))
+	if len(solution) > 25:
+		ANIMATION_SPEED = float(8 * 5)/ len(solution)
+	else:
+		ANIMATION_SPEED = 1
+	ANIMATION_SPEED = max(MAX_ANIMATION_SPEED, ANIMATION_SPEED)
 	if tween:
 		tween.kill()
 	tween = get_tree().create_tween()
-	#tween.tween_property(player, "position", local_position, ANIMATION_SPEED).set_trans(Tween.TRANS_LINEAR)
-	#var target_position = Vector3(5, 0, 5)  
-	#var offset = player.position
-	#var adjusted_position = target_position - offset
-	
-	#await tween.finished
-	
-	#print(player.position)
-	#
-	#tween.tween_property(player, "global_position", adjusted_position, 0.5).set_trans(Tween.TRANS_LINEAR)
 
 	#var pellets = grid_map.get_used_cells_by_item(PELLET);
 	#for p in pellets:
