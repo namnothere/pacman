@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://byvtrghidpvui"]
+
+[ext_resource type="Script" path="res://scripts/solver.gd" id="1_ad1fc"]
+
+[node name="Solver" type="Node"]
+script = ExtResource("1_ad1fc")

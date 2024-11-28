@@ -1,0 +1,227 @@
+[gd_scene load_steps=12 format=3 uid="uid://d0idsk5jwva5"]
+
+[ext_resource type="FontFile" uid="uid://bhk06qx0dfb4l" path="res://assets/fonts/upheavtt.ttf" id="1_6cfyp"]
+[ext_resource type="StyleBox" uid="uid://cw1wulfqt8qd1" path="res://assets/textures/hover_button.tres" id="1_hb7kg"]
+[ext_resource type="Texture2D" uid="uid://ggyvunb75nyq" path="res://assets/Brick Wall/BrickWall_Albedo.tga" id="1_qsdsd"]
+[ext_resource type="Script" path="res://scripts/main_menu.gd" id="1_wc5vw"]
+[ext_resource type="Texture2D" uid="uid://dkl0276ug7oos" path="res://assets/Brick Wall/wall_texture.jpg" id="2_e4ykb"]
+[ext_resource type="Shader" path="res://shaders/main_menu.gdshader" id="2_mqc6u"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4lrqh"]
+shader = ExtResource("2_mqc6u")
+shader_parameter/Direction = Vector2(0.5, 0.5)
+shader_parameter/Speed = 0.08
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_csuy0"]
+texture = ExtResource("2_e4ykb")
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+modulate_color = Color(0.466181, 0.466181, 0.466181, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x3rk2"]
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gvry7"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_woivm"]
+texture = ExtResource("1_qsdsd")
+region_rect = Rect2(131, 328, 513, 202)
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_wc5vw")
+
+[node name="Panel" type="Panel" parent="."]
+texture_repeat = 2
+material = SubResource("ShaderMaterial_4lrqh")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_csuy0")
+metadata/_edit_lock_ = true
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -188.0
+offset_top = -308.0
+offset_right = 195.0
+offset_bottom = -206.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 0.203922, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_6cfyp")
+theme_override_font_sizes/font_size = 70
+text = "PACMAN"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -138.0
+offset_top = -183.5
+offset_right = 138.0
+offset_bottom = 183.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+metadata/_edit_lock_ = true
+
+[node name="StartButtonBorder" type="Button" parent="VBoxContainer"]
+clip_children = 2
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_x3rk2")
+
+[node name="StartButton" type="Button" parent="VBoxContainer/StartButtonBorder"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -138.0
+offset_top = -44.0
+offset_right = 138.0
+offset_bottom = 45.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_6cfyp")
+theme_override_font_sizes/font_size = 30
+theme_override_styles/focus = SubResource("StyleBoxEmpty_gvry7")
+theme_override_styles/hover = ExtResource("1_hb7kg")
+theme_override_styles/pressed = ExtResource("1_hb7kg")
+theme_override_styles/normal = SubResource("StyleBoxTexture_woivm")
+text = "Start Game"
+
+[node name="OptionsButtonBorder" type="Button" parent="VBoxContainer"]
+clip_children = 2
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_x3rk2")
+
+[node name="OptionsButton" type="Button" parent="VBoxContainer/OptionsButtonBorder"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -138.0
+offset_top = -44.5
+offset_right = 138.0
+offset_bottom = 44.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_6cfyp")
+theme_override_font_sizes/font_size = 30
+theme_override_styles/focus = SubResource("StyleBoxEmpty_gvry7")
+theme_override_styles/hover = ExtResource("1_hb7kg")
+theme_override_styles/pressed = ExtResource("1_hb7kg")
+theme_override_styles/normal = SubResource("StyleBoxTexture_woivm")
+text = "Options"
+
+[node name="CreditsButtonBorder" type="Button" parent="VBoxContainer"]
+clip_children = 2
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_x3rk2")
+
+[node name="CreditsButton" type="Button" parent="VBoxContainer/CreditsButtonBorder"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -138.0
+offset_top = -44.5
+offset_right = 138.0
+offset_bottom = 44.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_6cfyp")
+theme_override_font_sizes/font_size = 30
+theme_override_styles/focus = SubResource("StyleBoxEmpty_gvry7")
+theme_override_styles/hover = ExtResource("1_hb7kg")
+theme_override_styles/pressed = ExtResource("1_hb7kg")
+theme_override_styles/normal = SubResource("StyleBoxTexture_woivm")
+text = "Credits"
+
+[node name="ExitButtonBorder" type="Button" parent="VBoxContainer"]
+clip_children = 2
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_x3rk2")
+
+[node name="ExitButton" type="Button" parent="VBoxContainer/ExitButtonBorder"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -138.0
+offset_top = -44.5
+offset_right = 138.0
+offset_bottom = 44.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_6cfyp")
+theme_override_font_sizes/font_size = 30
+theme_override_styles/focus = SubResource("StyleBoxEmpty_gvry7")
+theme_override_styles/hover = ExtResource("1_hb7kg")
+theme_override_styles/pressed = ExtResource("1_hb7kg")
+theme_override_styles/normal = SubResource("StyleBoxTexture_woivm")
+text = "Exit"
+
+[connection signal="pressed" from="VBoxContainer/StartButtonBorder/StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/OptionsButtonBorder/OptionsButton" to="." method="_on_options_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/CreditsButtonBorder/CreditsButton" to="." method="_on_credits_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/ExitButtonBorder/ExitButton" to="." method="_on_exit_button_pressed"]

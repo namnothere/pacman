@@ -1,0 +1,60 @@
+[gd_scene load_steps=8 format=3 uid="uid://cyhnd24apl58c"]
+
+[ext_resource type="Script" path="res://scripts/auto_grid_map.gd" id="1_sdpun"]
+[ext_resource type="MeshLibrary" uid="uid://cqtxmliw007w7" path="res://assets/gridmap/tiles.tres" id="2_0c735"]
+[ext_resource type="PackedScene" uid="uid://chu8rojcgdmi7" path="res://scenes/player.tscn" id="3_vkyei"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yjkx0"]
+albedo_color = Color(0.136826, 0.136826, 0.136826, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_b261c"]
+material = SubResource("StandardMaterial3D_yjkx0")
+size = Vector2(100, 100)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_mgrey"]
+points = PackedVector3Array(-50, 0, -50, -50, 0, 50, 50, 0, -50, 50, 0, 50)
+
+[sub_resource type="Environment" id="Environment_g0367"]
+background_mode = 3
+
+[node name="World" type="Node3D"]
+script = ExtResource("1_sdpun")
+
+[node name="GridMap_Maze" type="GridMap" parent="."]
+mesh_library = ExtResource("2_0c735")
+cell_size = Vector3(4, 8, 4)
+cell_scale = 4.0
+collision_mask = 15
+metadata/_editor_floor_ = Vector3(0, 0, 0)
+
+[node name="TopDownCamera" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 50, 0)
+top_level = true
+keep_aspect = 0
+projection = 1
+current = true
+fov = 106.3
+size = 180.634
+
+[node name="player" parent="." node_paths=PackedStringArray("top_down_camera") instance=ExtResource("3_vkyei")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 2.89259, 38.6899)
+collision_mask = 9
+motion_mode = 1
+safe_margin = 0.05
+top_down_camera = NodePath("../TopDownCamera")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -0.5, 0.866025, 0, -0.866025, -0.5, 0, 0, 0)
+
+[node name="Floor" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_b261c")
+skeleton = NodePath("")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Floor"]
+collision_mask = 15
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor/StaticBody3D"]
+shape = SubResource("ConvexPolygonShape3D_mgrey")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_g0367")

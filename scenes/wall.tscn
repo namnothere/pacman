@@ -1,6 +1,12 @@
-[gd_scene load_steps=3 format=3 uid="uid://cskw0x80h34o4"]
+[gd_scene load_steps=5 format=3 uid="uid://cskw0x80h34o4"]
+
+[ext_resource type="Texture2D" uid="uid://ggyvunb75nyq" path="res://assets/Brick Wall/BrickWall_Albedo.tga" id="1_ywrvj"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dsjei"]
+albedo_texture = ExtResource("1_ywrvj")
 
 [sub_resource type="BoxMesh" id="BoxMesh_s0lf3"]
+material = SubResource("StandardMaterial3D_dsjei")
 size = Vector3(1, 5, 1)
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_8p3f1"]
