@@ -46,6 +46,7 @@ func init_map():
 		var _row: Array = []
 		_row.resize(MAP_SIZE)
 		_row.fill(WALL)
+		#_row.fill(FLOOR)
 		grid.append(_row)
 
 	center_x = MAP_SIZE / 2 + 1
@@ -167,10 +168,14 @@ func move_to_next_step(steps_array):
 		tween = get_tree().create_tween()
 		#var local_position = grid_map.map_to_local(Vector3i(current_step[1] - center_y, 0, current_step[0] - center_x))
 		
-		var vector = Vector3(current_step[1] - center_y, 0, current_step[0] - center_x);
+		#var vector = Vector3(current_step[1] - center_y, 0, current_step[0] - center_x);
+		var vector = Vector3(current_step[1] - center_x + 1, 0.25, current_step[0] - center_y + 1);
+		#var vector = Vector3(0, 0, 0);
 		var local_position = Vector3(Vector3i(grid_map.map_to_local(vector)));
 		
-		print(local_position)
+		local_position.x = local_position.x - grid_map.cell_size.x / 2;
+		local_position.z = int(local_position.z - grid_map.cell_size.y / 2);
+		
 		tween.tween_property(player, "position", local_position, ANIMATION_SPEED).set_trans(Tween.TRANS_LINEAR)
 		#
 		#await tween.finished
@@ -187,13 +192,13 @@ func _on_found_solution(solution):
 	#if len(solution) > 8:
 		#ANIMATION_SPEED = 8 / len(solution)
 	#else: ANIMATION_SPEED = 1
-	print(solution)
-	var current_step = [5, 1]
-	print(player.position)
+	#print(solution)
+	#var current_step = [5, 1]
+	#print(player.position)
 	#var local_position = Vector3(Vector3i(grid_map.map_to_local(Vector3i(current_step[1] - center_y, 0, current_step[0] - center_x))))
-	#if tween:
-		#tween.kill()
-	#tween = get_tree().create_tween()
+	if tween:
+		tween.kill()
+	tween = get_tree().create_tween()
 	#tween.tween_property(player, "position", local_position, ANIMATION_SPEED).set_trans(Tween.TRANS_LINEAR)
 	#var target_position = Vector3(5, 0, 5)  
 	#var offset = player.position
@@ -204,6 +209,13 @@ func _on_found_solution(solution):
 	#print(player.position)
 	#
 	#tween.tween_property(player, "global_position", adjusted_position, 0.5).set_trans(Tween.TRANS_LINEAR)
+
+	#var pellets = grid_map.get_used_cells_by_item(PELLET);
+	#for p in pellets:
+		#var local_position = grid_map.map_to_local(p)
+		#print("Pellet local position:", local_position)
+		#local_position.x -= grid_map.cell_size.x / 2
+		#tween.tween_property(player, "position", local_position, ANIMATION_SPEED).set_trans(Tween.TRANS_LINEAR)
 
 	move_to_next_step(solution)
 	pass
