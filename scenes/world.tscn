@@ -69,3 +69,8 @@ environment = SubResource("Environment_0exhu")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -0.5, 0.866025, 0, -0.866025, -0.5, 0, 40.3264, 0)
+
+[node name="PenaltyTimer" type="Timer" parent="."]
+autostart = true
+
+[connection signal="timeout" from="PenaltyTimer" to="." method="_on_penalty_timer_timeout"]
