@@ -18,7 +18,7 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	pass
 
-func _get_solution(tile_map, pellet_map, algo: int = GBFS):
+func _get_solution(tile_map, pellet_map, algo: int = UCS):
 	var body = JSON.stringify({"tile_map": tile_map, "pellet_map": pellet_map, "algo": algo, "start_position": [0, 0]})
 	print(body)
 	await http_request.request(ENDPOINT_URL + "/solve", [], HTTPClient.METHOD_POST, body)

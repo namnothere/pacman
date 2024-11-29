@@ -19,6 +19,7 @@ config/icon="res://assets/icon.svg"
 
 Signals="*res://scripts/signals.gd"
 Solver="*res://scripts/solver.gd"
+Global="*res://scripts/global.gd"
 
 [display]
 

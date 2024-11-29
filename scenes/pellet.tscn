@@ -19,13 +19,15 @@ mesh = SubResource("SphereMesh_erjv3")
 
 [node name="PalletStaticBody3D" type="StaticBody3D" parent="PelletNewMeshInstance3D"]
 collision_layer = 16
-collision_mask = 31
+collision_mask = 19
 
 [node name="PalletCollisionShape3D" type="CollisionShape3D" parent="PelletNewMeshInstance3D/PalletStaticBody3D"]
 shape = SubResource("BoxShape3D_j3ru0")
 disabled = true
 
 [node name="Area3D" type="Area3D" parent="."]
+collision_layer = 17
+collision_mask = 3
 
 [node name="AreaColiisionShape3D" type="CollisionShape3D" parent="Area3D"]
 shape = SubResource("BoxShape3D_j3ru0")
