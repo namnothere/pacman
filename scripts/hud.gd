@@ -1,6 +1,7 @@
 extends CanvasLayer
 
 @onready var score_label: Label = $MarginContainer/VSplitContainer/ScoreLabel
+@onready var optionBtn: OptionButton = $OptionContainer/VSplitContainer/OptionButton
 var score: int = 0
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -31,3 +32,10 @@ func _on_received_reward(point: int):
 func _on_penalty():
 	score -= 1 
 	score_label.text = str(score)
+
+
+func _on_start_button_pressed() -> void:
+	print("Chosing", optionBtn.get_selected_id())
+	Solver._get_solution(Global.grid, Global.pellet_map, optionBtn.get_selected_id())
+
+	pass # Replace with function body.

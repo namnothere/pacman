@@ -9,6 +9,7 @@ script = ExtResource("1_umkfm")
 [node name="MarginContainer" type="MarginContainer" parent="."]
 offset_right = 225.0
 offset_bottom = 82.0
+metadata/_edit_lock_ = true
 
 [node name="VSplitContainer" type="VSplitContainer" parent="MarginContainer"]
 layout_mode = 2
@@ -29,6 +30,43 @@ text = "0
 "
 horizontal_alignment = 2
 
+[node name="OptionContainer" type="MarginContainer" parent="."]
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -234.0
+offset_right = 225.0
+offset_bottom = -163.0
+grow_vertical = 2
+
+[node name="VSplitContainer" type="VSplitContainer" parent="OptionContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+dragger_visibility = 1
+
+[node name="AlgoLabel" type="Label" parent="OptionContainer/VSplitContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_c7rf2")
+theme_override_font_sizes/font_size = 30
+text = "Algo"
+horizontal_alignment = 2
+
+[node name="OptionButton" type="OptionButton" parent="OptionContainer/VSplitContainer"]
+layout_mode = 2
+alignment = 2
+selected = 0
+allow_reselect = true
+item_count = 5
+popup/item_0/text = "BFS"
+popup/item_1/text = "DFS"
+popup/item_1/id = 1
+popup/item_2/text = "UCS"
+popup/item_2/id = 3
+popup/item_3/text = "Greedy"
+popup/item_3/id = 5
+popup/item_4/text = "Astar"
+popup/item_4/id = 6
+
 [node name="Solution" type="Label" parent="."]
 visible = false
 offset_left = 27.0
@@ -36,3 +74,14 @@ offset_top = 111.0
 offset_right = 109.0
 offset_bottom = 134.0
 text = "SOLUTION"
+
+[node name="StartButton" type="Button" parent="."]
+offset_left = 134.0
+offset_top = 185.0
+offset_right = 229.0
+offset_bottom = 221.0
+theme_override_fonts/font = ExtResource("1_c7rf2")
+theme_override_font_sizes/font_size = 30
+text = "START"
+
+[connection signal="pressed" from="StartButton" to="." method="_on_start_button_pressed"]

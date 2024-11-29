@@ -38,10 +38,10 @@ func _ready() -> void:
 		generate_grid()
 		pellet_map = spawn_pellets()
 		spawn_player_at_random()
+		Global.pellet_map = pellet_map
 
 	if topdowncamera.current == true:
 		player.scale = Vector3(CHARACTER_SCALE, CHARACTER_SCALE, CHARACTER_SCALE)
-		Solver._get_solution(grid, pellet_map)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
@@ -104,6 +104,8 @@ func dfs_maze_generate(start_x: int = 1, start_y: int = 1):
 			stack.append(next)
 		else:
 			stack.pop_back()
+			
+	Global.grid = grid
 
 func is_valid_move(x: int, y: int):
 	return x >= 0 and x < MAP_SIZE and y > 0 and y < MAP_SIZE and grid[y][x] == WALL

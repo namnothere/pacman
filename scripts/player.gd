@@ -18,18 +18,16 @@ var is_first_person: bool = false
 var is_auto: bool = true
 
 
-func _ready() -> void:
-	#camera = get_node("../TopDownCamera")
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	
+func _ready() -> void:	
 	is_first_person = bool(top_down_camera.current == false)
 	print("is_first_person: ", is_first_person)
+	if is_first_person:
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	
 func _input(event: InputEvent):
 	if event is InputEventMouseMotion and is_first_person == true:
 		var MouseEvent = event.relative * mouse_sensitivity
 		camera_look(MouseEvent)
-	
 	
 	var input_dir := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	if input_dir and is_auto == false:
