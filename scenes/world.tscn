@@ -44,11 +44,13 @@ transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0)
 axis_lock_linear_y = true
 safe_margin = 0.1
 top_down_camera = NodePath("../TopDownCamera")
+is_ai_control = true
 
 [node name="TopDownCamera" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 50, 0)
 keep_aspect = 0
 projection = 1
+current = true
 fov = 106.3
 size = 190.0
 metadata/_edit_lock_ = true
@@ -79,5 +81,6 @@ autostart = true
 [node name="Sync" type="Node" parent="."]
 script = ExtResource("6_14s1e")
 control_mode = 0
+speed_up = 8.0
 
 [connection signal="timeout" from="PenaltyTimer" to="." method="_on_penalty_timer_timeout"]

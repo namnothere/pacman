@@ -76,7 +76,8 @@ func camera_fixed_at(direction: Vector2):
 	transform.basis = Basis()
 	rotate_object_local(Vector3(0, 1, 0), deg_to_rad(angle))
 	
-	scale = Vector3(CHARACTER_SCALE, CHARACTER_SCALE, CHARACTER_SCALE)
+	#scale = Vector3(CHARACTER_SCALE, CHARACTER_SCALE, CHARACTER_SCALE)
+	visuals.scale = Vector3(CHARACTER_SCALE, CHARACTER_SCALE, CHARACTER_SCALE)
 
 func _physics_process(_delta: float) -> void:
 	
@@ -97,6 +98,7 @@ func _physics_process(_delta: float) -> void:
 		#else:
 		velocity.x = ai_controller.move.x
 		velocity.z = ai_controller.move.y
+		camera_fixed_at(ai_controller.camera_direction)
 		move_and_slide()
 		return
 	

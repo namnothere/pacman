@@ -13,10 +13,10 @@ const SCALE_FACTOR: Vector3 = Vector3(4, 4, 4)
 var tween: Tween
 const Pellet: PackedScene = preload("res://scenes/pellet.tscn")
 
-@export var MAP_SIZE: int = 21
+@export var MAP_SIZE: int = 5
 @export var is_auto_map: bool = true
 @export var PELLET_SPAWN_RATIO: float = 0.04
-@export var MIN_PELLET_SPAWN: int = 3
+@export var MIN_PELLET_SPAWN: int = 1
 @export var ANIMATION_SPEED: float = 0.25
 @export var MAX_ANIMATION_SPEED: float = 0.6
 
@@ -206,6 +206,9 @@ func move_to_next_step(steps_array):
 		print("Character has reached the goal!")
 		penalty_timer.stop()
 		Signals.emit_signal("game_over")
+		
+		await get_tree().create_timer(1).timeout
+		get_tree().reload_current_scene()
 
 func _on_found_solution(solution):
 	#solution = unique_array(solution)
@@ -264,7 +267,7 @@ func newObject(cell: Vector3, cellPos: Vector3, inst: PackedScene):
 func _on_penalty_timer_timeout() -> void:
 	Signals.emit_signal("penalty")
 	
-func _on_received_reward():
+func _on_received_reward(_point):
 	Global.target_pellet = get_tree().get_first_node_in_group("pellet")
 	print("Retrieve next target")
 	
