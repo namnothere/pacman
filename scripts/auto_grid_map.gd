@@ -194,7 +194,8 @@ func move_to_next_step(steps_array):
 		var local_position = Vector3(Vector3i(grid_map.map_to_local(vector)));
 
 		local_position.x = local_position.x - grid_map.cell_size.x / 2 + 0.5;
-		local_position.y = local_position.y - grid_map.cell_size.y / 2;
+		#local_position.y = local_position.y - grid_map.cell_size.y / 2;
+		local_position.y = player.global_position.y
 		local_position.z = local_position.z - grid_map.cell_size.z / 2;
 		
 		tween.tween_property(player, "position", local_position, ANIMATION_SPEED).set_trans(Tween.TRANS_LINEAR)
