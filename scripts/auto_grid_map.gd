@@ -28,6 +28,9 @@ const Pellet: PackedScene = preload("res://scenes/pellet.tscn")
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	Signals.connect("found_solution", _on_found_solution)
+	MAP_SIZE = Global.MAP_SIZE
+	topdowncamera.set_current(Global.is_topdown_active)
+	
 	var pellet_map;
 	if is_auto_map:
 		grid_map.clear()
@@ -43,6 +46,7 @@ func _ready() -> void:
 	else:
 		sync.control_mode = sync.ControlModes.TRAINING
 		Signals.connect("received_reward", _on_received_reward)
+		Signals.connect("ai_move", _on_ai_move)
 		
 	Global.target_pellet = get_tree().get_first_node_in_group("pellet")
 	print("target_pellet: ", Global.target_pellet)
@@ -144,6 +148,7 @@ func spawn_player_at_random():
 	var cells = grid_map.get_used_cells_by_item(PLAYER)
 	if cells.size() > 0:
 		var grid_cell = cells[0]
+		Global.player_pos = Vector2(start_pos.y, start_pos.x)
 		var world_position = grid_map.map_to_local(grid_cell)
 		player.global_transform.origin = world_position
 		grid_map.set_cell_item(grid_cell, -1)
@@ -202,13 +207,11 @@ func move_to_next_step(steps_array):
 		player.global_position = local_position
 		steps_array.remove_at(0)
 		await move_to_next_step(steps_array)
+
 	else:
 		print("Character has reached the goal!")
 		penalty_timer.stop()
 		Signals.emit_signal("game_over")
-		
-		await get_tree().create_timer(1).timeout
-		get_tree().reload_current_scene()
 
 func _on_found_solution(solution):
 	#solution = unique_array(solution)
@@ -270,4 +273,10 @@ func _on_penalty_timer_timeout() -> void:
 func _on_received_reward(_point):
 	Global.target_pellet = get_tree().get_first_node_in_group("pellet")
 	print("Retrieve next target")
+	
+func _on_ai_move(steps):
+	move_to_next_step(steps)
+	Global.player_pos = steps[0]
+	
+	
 	

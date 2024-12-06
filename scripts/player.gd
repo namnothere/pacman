@@ -23,6 +23,7 @@ var is_auto: bool = false
 
 func _ready() -> void:
 	is_first_person = bool(top_down_camera.current == false)
+	is_ai_control = Global.is_ai_control
 	#scale = Vector3(CHARACTER_SCALE, CHARACTER_SCALE, CHARACTER_SCALE)
 
 	print("is_first_person: ", is_first_person)
@@ -33,6 +34,8 @@ func _ready() -> void:
 		ai_controller.init(self)
 	if is_first_person and is_ai_control == false:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	if Global.is_algo == false:
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	#visuals.scale = Vector3(CHARACTER_SCALE, CHARACTER_SCALE, CHARACTER_SCALE)
 
 func _on_game_over():
@@ -41,6 +44,10 @@ func _on_game_over():
 
 func _input(event: InputEvent):
 	if event is InputEventMouseMotion and is_first_person == true and is_ai_control == false:
+		var MouseEvent = event.relative * mouse_sensitivity
+		camera_look(MouseEvent)
+	
+	if event is InputEventMouseMotion and Global.is_algo == false:
 		var MouseEvent = event.relative * mouse_sensitivity
 		camera_look(MouseEvent)
 	
@@ -96,9 +103,10 @@ func _physics_process(_delta: float) -> void:
 		#if ai_controller.heuristic == "human":
 			#movement = Input.get_axis("rotate_anticlockwise", "rotate_clockwise")
 		#else:
-		velocity.x = ai_controller.move.x
-		velocity.z = ai_controller.move.y
-		camera_fixed_at(ai_controller.camera_direction)
+		#velocity.x = ai_controller.move.x
+		#velocity.z = ai_controller.move.y
+		#camera_fixed_at(ai_controller.camera_direction)
+		
 		move_and_slide()
 		return
 	

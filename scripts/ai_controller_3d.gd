@@ -7,86 +7,109 @@ var move = Vector2.ZERO
 var previous_distance_to_target: float = 0
 var camera_direction: Vector2 = Vector2.ZERO
 
+const FLOOR: int = -1
+const WALL: int = 0
+const PELLET: int = 1
+const PLAYER: int = 2
+
 func _ready() -> void:
 	super._ready()
 	Signals.connect("penalty", _on_penalty)
 	Signals.connect("received_reward", _on_received_reward)
 	Signals.connect("on_wall", _on_penalty)
-
+	
 func get_obs() -> Dictionary:
-	# get the balls position and velocity in the paddle's frame of reference
-	#var ball_pos = to_local(_player.ball.global_position)
-	#var ball_vel = to_local(_player.ball.linear_velocity)
-	#var obs = [ball_pos.x, ball_pos.z, ball_vel.x/10.0, ball_vel.z/10.0]
-	var obs = [];
-	if is_instance_valid(Global.target_pellet):
-		var target_pos = to_local(Global.target_pellet.global_position)
-		obs.append_array([
-			target_pos.x,
-			target_pos.y,
-			target_pos.z
-		])
-	else:
-		pass
+	var obs = [
+		Global.player_pos.x,
+		Global.player_pos.y,
+		#Global.pellet_map,
+		#Global.grid
+	];
+	
+	var flatten = flatten_2d_array(Global.grid)	
+	obs.append_array(flatten)
+
+	#if is_instance_valid(Global.target_pellet):
+		#var target_pos = to_local(Global.target_pellet.global_position)
+		#obs.append_array([
+			#target_pos.x,
+			#target_pos.y,
+			#target_pos.z
+		#])
+	#else:
+		#pass
 	if _player:
-		var player_pos = to_local(_player.global_position)
-		obs.append_array([
-			player_pos.x,
-			player_pos.y,
-			player_pos.z,
-		])
+		#var player_pos = to_local(_player.global_position)
+		#obs.append_array([
+			#player_pos.x,
+			#player_pos.y,
+			#player_pos.z,
+		#])
 		obs.append_array(_player.raycast_sensor.get_observation())
-		#obs.append_array(
-		#[
-			#_player.move_vec.x / _player.MOVE_SPEED,
-			#_player.move_vec.y / _player.MAX_FALL_SPEED,
-			#_player.move_vec.z / _player.MOVE_SPEED
-		#]
-	#)
 
 	return {"obs":obs}
+
+func flatten_2d_array(maze: Array) -> Array:
+	var flattened = []
+
+	for row in maze:
+		flattened += row
+
+	return flattened
+
 
 func get_reward() -> float:
 	return reward
 
 func get_action_space() -> Dictionary:
 	return {
-		"move_action" : {
-			"size": 2,
-			"action_type": "continuous"
+		"move_action": {
+			"size": 4,
+			"action_type": "discrete"
 		},
 		"camera_action": {
-			"size": 2,
-			"action_type": "continuous"
+			"size": 1,  # Camera direction (up, down, left, right)
+			"action_type": "discrete"
 		}
 	}
 
 func set_action(action) -> void:
-	#move_action = clamp(action["move_action"][0], -1.0, 1.0)
-	#move.x = action["move_action"][0]
-	#move.y = action["move_action"][1]
-	var move_x = action["move_action"][0]
-	var move_y = action["move_action"][1]
-	if abs(move_x) > abs(move_y):
-		move = Vector2(move_x, 0)
-	else:
-		# Move only along the y-axis
-		move = Vector2(0, move_y)
+	var direction: Vector2 = Vector2.ZERO
+	var new_position: Vector2
 	
-	var camera_action = action.get("camera_action", -1)
-	var direction = Vector2()
+	if _player:
+		reward += calculate_reward()
 
-	if camera_action[0] < -0.5:
-		direction.x = -1  # Move left
-	elif camera_action[0] > 0.5:
-		direction.x = 1   # Move right
+	match int(action["move_action"]):
+		0: # up
+			direction.x = -1
+		1: # down
+			direction.x = 1
+		2: # left
+			direction.y = -1
+		3: # right
+			direction.y = 1
+	
+	print("Global.player_pos: ", Global.player_pos)
+	new_position = Global.player_pos + direction
+	
+	if new_position in Global.visited:
+		_on_penalty()
+	
+	if is_valid_move(new_position):
+		move = new_position
+		reward += 1
+		#print("Moved to: ", move)
+		Signals.emit_signal("ai_move", [move])
+	else:
+		_on_penalty()
 
-	if camera_action[1] < -0.5:
-		direction.y = -1
-	elif camera_action[1] > 0.5:
-		direction.y = 1
-		
-	camera_direction = direction
+func is_valid_move(position: Vector2) -> bool:
+	if position.x < 0 or position.y < 0 or position.x >= Global.grid.size() or position.y >= Global.grid[0].size():
+		return false
+	if Global.grid[int(position.x)][int(position.y)] == FLOOR:
+		return true
+	return false
 
 func _on_penalty():
 	reward -= 1
@@ -100,6 +123,8 @@ func calculate_reward():
 	if is_instance_valid(Global.target_pellet) == false: return 0.0
 	var target_pos = to_local(Global.target_pellet.global_position)
 	var distance_to_target = player_pos.distance_to(target_pos)
+	
+	print("distance_to_target: ", distance_to_target)
 
 	if distance_to_target < previous_distance_to_target:
 		return 1.0
@@ -112,13 +137,13 @@ func calculate_reward():
 	previous_distance_to_target = distance_to_target
 	return 0.0
 
-func _physics_process(_delta: float) -> void:
-	if _player:
-		reward += calculate_reward()
-		
-	var move_dir = move
-	var camera_dir = Vector2(-camera.global_transform.basis.z.x, -camera.global_transform.basis.z.z)
-	reward -= calculate_misalignment_penalty(move_dir, camera_dir) * 0.5  # Weight the penalty
+#func _physics_process(_delta: float) -> void:
+	#if _player:
+		#reward += calculate_reward()
+		#
+	#var move_dir = move
+	#var camera_dir = Vector2(-camera.global_transform.basis.z.x, -camera.global_transform.basis.z.z)
+	#reward -= calculate_misalignment_penalty(move_dir, camera_dir) * 0.5  # Weight the penalty
 	#print("Current reward: ", reward)
 
 func calculate_misalignment_penalty(move_dir: Vector2, camera_dir: Vector2) -> float:

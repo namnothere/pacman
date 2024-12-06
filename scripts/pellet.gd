@@ -4,6 +4,8 @@ extends Node3D
 var time_passed
 var origin_pos
 
+var pos_on_grid: Vector2
+
 const REWARD: int = 100
 
 # Called when the node enters the scene tree for the first time.

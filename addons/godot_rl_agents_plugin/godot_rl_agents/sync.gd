@@ -467,7 +467,6 @@ func _set_seed():
 func _set_action_repeat():
 	action_repeat = args.get("action_repeat", str(action_repeat)).to_int()
 
-
 func disconnect_from_server():
 	stream.disconnect_from_host()
 
@@ -475,7 +474,7 @@ func disconnect_from_server():
 func handle_message() -> bool:
 	# get json message: reset, step, close
 	var message = _get_dict_json_message()
-	print(message)
+	#print(message)
 	if message["type"] == "close":
 		print("received close message, closing game")
 		get_tree().quit()

@@ -80,7 +80,6 @@ autostart = true
 
 [node name="Sync" type="Node" parent="."]
 script = ExtResource("6_14s1e")
-control_mode = 0
-speed_up = 8.0
+action_repeat = 32
 
 [connection signal="timeout" from="PenaltyTimer" to="." method="_on_penalty_timer_timeout"]
