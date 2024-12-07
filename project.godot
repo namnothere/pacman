@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="pacman"
-run/main_scene="res://scenes/world.tscn"
+run/main_scene="res://scenes/main_menu.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://assets/icon.svg"
 
@@ -38,7 +38,7 @@ version_control/autoload_on_startup=true
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/wfc/plugin.cfg")
+enabled=PackedStringArray("res://addons/godot_rl_agents_plugin/godot_rl_agents/plugin.cfg")
 
 [input]
 
@@ -80,6 +80,8 @@ ui_down={
 3d_render/layer_1="floor"
 3d_render/layer_2="environment"
 3d_render/layer_3="player"
+3d_render/layer_4="pellet"
+3d_render/layer_5="light"
 3d_physics/layer_1="env"
 3d_physics/layer_2="player"
 3d_physics/layer_3="enemies"

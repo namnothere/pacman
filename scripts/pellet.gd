@@ -4,13 +4,16 @@ extends Node3D
 var time_passed
 var origin_pos
 
+var pos_on_grid: Vector2
+
 const REWARD: int = 100
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	time_passed = 0
-	origin_pos = global_position
-	print("loc: ", self.origin_pos)
+	#time_passed = 0
+	#origin_pos = global_position
+	#print("loc: ", self.origin_pos)
+	pass
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:

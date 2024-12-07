@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://cog78f02vj14m"]
+[gd_scene load_steps=11 format=3 uid="uid://cog78f02vj14m"]
 
 [ext_resource type="Script" path="res://scripts/auto_grid_map.gd" id="1_w4m4e"]
 [ext_resource type="Texture2D" uid="uid://cyawrx32imyqv" path="res://assets/textures/gray_rocks_diff_1k.png" id="2_o1hrm"]
 [ext_resource type="PackedScene" uid="uid://chu8rojcgdmi7" path="res://scenes/player.tscn" id="5_ag221"]
+[ext_resource type="Script" path="res://addons/godot_rl_agents_plugin/godot_rl_agents/sync.gd" id="6_14s1e"]
 [ext_resource type="MeshLibrary" uid="uid://cqtxmliw007w7" path="res://assets/gridmap/tiles.tres" id="6_xgnff"]
 [ext_resource type="PackedScene" uid="uid://blqjcjq7xnw0e" path="res://scenes/hud.tscn" id="8_hag2m"]
 
@@ -41,8 +42,9 @@ shape = SubResource("ConvexPolygonShape3D_msdpp")
 [node name="player" parent="." node_paths=PackedStringArray("top_down_camera") instance=ExtResource("5_ag221")]
 transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0)
 axis_lock_linear_y = true
-safe_margin = 0.05
+safe_margin = 0.1
 top_down_camera = NodePath("../TopDownCamera")
+is_ai_control = true
 
 [node name="TopDownCamera" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 50, 0)
@@ -69,8 +71,15 @@ environment = SubResource("Environment_0exhu")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -0.5, 0.866025, 0, -0.866025, -0.5, 0, 40.3264, 0)
+layers = 16
+light_energy = 0.36
+light_cull_mask = 4294966287
 
 [node name="PenaltyTimer" type="Timer" parent="."]
 autostart = true
+
+[node name="Sync" type="Node" parent="."]
+script = ExtResource("6_14s1e")
+speed_up = 8.0
 
 [connection signal="timeout" from="PenaltyTimer" to="." method="_on_penalty_timer_timeout"]

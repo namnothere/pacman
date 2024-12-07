@@ -9,43 +9,58 @@ const FLOOR: int = -1
 const WALL: int = 0
 const PELLET: int = 1
 const PLAYER: int = 2
-const CHARACTER_SCALE: int = 4
 const SCALE_FACTOR: Vector3 = Vector3(4, 4, 4)
 var tween: Tween
+var is_four_walls: bool = true
 const Pellet: PackedScene = preload("res://scenes/pellet.tscn")
 
-@export var MAP_SIZE: int = 9
+@export var MAP_SIZE: int = 5
 @export var is_auto_map: bool = true
 @export var PELLET_SPAWN_RATIO: float = 0.04
-@export var MIN_PELLET_SPAWN: int = 3
-@export var ANIMATION_SPEED: float = 0.35
+@export var MIN_PELLET_SPAWN: int = 1
+@export var ANIMATION_SPEED: float = 0.25
 @export var MAX_ANIMATION_SPEED: float = 0.6
 
 @onready var grid_map: GridMap = $GridMap_Maze
 @onready var player: CharacterBody3D = $player
 @onready var topdowncamera: Camera3D = $TopDownCamera
 @onready var penalty_timer: Timer = $PenaltyTimer
+@onready var sync: Sync = $Sync
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	#penalty_timer.wait_time = 1
-	#penalty_timer.autostart = 
 	Signals.connect("found_solution", _on_found_solution)
+	MAP_SIZE = Global.MAP_SIZE
+	is_four_walls = Global.is_four_wall_only
+	topdowncamera.set_current(Global.is_topdown_active)
+	
 	var pellet_map;
 	if is_auto_map:
 		grid_map.clear()
 		init_map()
-		dfs_maze_generate()
+		if is_four_walls == false:
+			dfs_maze_generate()
+		else:
+			four_wall_generate()
+		Global.grid = grid
 		generate_grid()
 		pellet_map = spawn_pellets()
 		spawn_player_at_random()
 		Global.pellet_map = pellet_map
-
-	if topdowncamera.current == true:
-		player.scale = Vector3(CHARACTER_SCALE, CHARACTER_SCALE, CHARACTER_SCALE)
-
+		
+	if player.is_ai_control == false:
+		sync.control_mode = sync.ControlModes.HUMAN
+	else:
+		sync.control_mode = sync.ControlModes.TRAINING
+		Signals.connect("received_reward", _on_received_reward)
+		Signals.connect("ai_move", _on_ai_move)
+		
+	Global.target_pellet = get_tree().get_first_node_in_group("pellet")
+	print("target_pellet: ", Global.target_pellet)
+	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
-	pass
+	if is_instance_valid(Global.target_pellet) == false:
+		_on_received_reward(0)
 	
 func init_map():
 	for i in range(MAP_SIZE):
@@ -104,8 +119,6 @@ func dfs_maze_generate(start_x: int = 1, start_y: int = 1):
 			stack.append(next)
 		else:
 			stack.pop_back()
-			
-	Global.grid = grid
 
 func is_valid_move(x: int, y: int):
 	return x >= 0 and x < MAP_SIZE and y > 0 and y < MAP_SIZE and grid[y][x] == WALL
@@ -140,6 +153,7 @@ func spawn_player_at_random():
 	var cells = grid_map.get_used_cells_by_item(PLAYER)
 	if cells.size() > 0:
 		var grid_cell = cells[0]
+		Global.player_pos = Vector2(start_pos.y, start_pos.x)
 		var world_position = grid_map.map_to_local(grid_cell)
 		player.global_transform.origin = world_position
 		grid_map.set_cell_item(grid_cell, -1)
@@ -161,7 +175,6 @@ func spawn_pellets():
 		grid[pellet_cell.y][pellet_cell.x] = PELLET
 		pellet_map.append([pellet_cell.y, pellet_cell.x])
 
-		#var logical_x = pellet_cell.x - center_x
 		var logical_x = pellet_cell.x - center_x
 		var logical_y = pellet_cell.y - center_y
 		var logical_z = 3
@@ -179,44 +192,41 @@ func move_to_next_step(steps_array):
 	if steps_array.size() > 0:
 		var current_step = steps_array[0]
 		tween = get_tree().create_tween()
-		#var local_position = grid_map.map_to_local(Vector3i(current_step[1] - center_y, 0, current_step[0] - center_x))
 		
-		print("Moving to ", current_step);
+		#print("Moving to ", current_step);
 		
-		#var vector = Vector3(current_step[1] - center_y, 0, current_step[0] - center_x);
 		var vector = Vector3(current_step[1] - center_x + 1, 0.25, current_step[0] - center_y + 1);
-		#var vector = Vector3(0, 0, 0);
 		var local_position = Vector3(Vector3i(grid_map.map_to_local(vector)));
 
-		#local_position.x = 5;
-		#local_position.x = local_position.x - grid_map.cell_size.x / 2;
 		local_position.x = local_position.x - grid_map.cell_size.x / 2 + 0.5;
-		local_position.y = local_position.y - grid_map.cell_size.y / 2;
+		#local_position.y = local_position.y - grid_map.cell_size.y / 2;
+		local_position.y = player.global_position.y
 		local_position.z = local_position.z - grid_map.cell_size.z / 2;
-		#local_position.z = 5;
-		
-		#print("local_position: ", local_position)
 		
 		tween.tween_property(player, "position", local_position, ANIMATION_SPEED).set_trans(Tween.TRANS_LINEAR)
-		#
-		#await tween.finished
+		
+		var direction = (local_position - player.global_position).normalized()
+		var movement = Vector2(direction.z, direction.x);
+
+		player.camera_fixed_at(movement)
 		await get_tree().create_timer(ANIMATION_SPEED).timeout
 		player.global_position = local_position
-		#print("player: ", player.global_position)
 		steps_array.remove_at(0)
 		await move_to_next_step(steps_array)
+
 	else:
-		print("Character has reached the goal!")
+		#print("Character has reached the goal!")
 		penalty_timer.stop()
+		Signals.emit_signal("game_over")
 
 func _on_found_solution(solution):
 	#solution = unique_array(solution)
 	print("Steps: ", len(solution))
-	if len(solution) > 25:
-		ANIMATION_SPEED = float(8 * 5)/ len(solution)
-	else:
-		ANIMATION_SPEED = 1
-	ANIMATION_SPEED = max(MAX_ANIMATION_SPEED, ANIMATION_SPEED)
+	#if len(solution) > 25:
+		#ANIMATION_SPEED = float(8 * 5)/ len(solution)
+	#else:
+		#ANIMATION_SPEED = 1
+	#ANIMATION_SPEED = max(MAX_ANIMATION_SPEED, ANIMATION_SPEED)
 	if tween:
 		tween.kill()
 	tween = get_tree().create_tween()
@@ -229,7 +239,6 @@ func _on_found_solution(solution):
 		#tween.tween_property(player, "position", local_position, ANIMATION_SPEED).set_trans(Tween.TRANS_LINEAR)
 
 	move_to_next_step(solution)
-	pass
 
 func unique_array(arr: Array) -> Array:
 	var dict := {}
@@ -266,3 +275,30 @@ func newObject(cell: Vector3, cellPos: Vector3, inst: PackedScene):
 
 func _on_penalty_timer_timeout() -> void:
 	Signals.emit_signal("penalty")
+	
+func _on_received_reward(_point):
+	Global.target_pellet = get_tree().get_first_node_in_group("pellet")
+	if not Global.target_pellet:
+		return
+	print("Retrieve next target")
+	
+func _on_ai_move(steps):
+	move_to_next_step(steps)
+	Global.player_pos = steps[0]
+	
+func four_wall_generate():
+	for ny in range(1, Global.MAP_SIZE - 1):
+		for nx in range(1, Global.MAP_SIZE - 1):
+			grid[ny][nx] = FLOOR
+
+	# add random walls
+	#var wall_density = 0.1
+	#for ny in range(1, Global.MAP_SIZE - 1):
+		#for nx in range(1, Global.MAP_SIZE - 1):
+			#if randf() < wall_density:
+				#grid[ny][nx] = WALL
+
+func _input(event: InputEvent):
+	if Input.is_action_just_pressed("ui_text_backspace"):
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		get_tree().change_scene_to_file("res://scenes/main_menu.tscn")

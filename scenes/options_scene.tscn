@@ -1,0 +1,123 @@
+[gd_scene load_steps=8 format=3 uid="uid://dk67vrq6ruwrm"]
+
+[ext_resource type="Script" path="res://scripts/options_scene.gd" id="1_6nyhh"]
+[ext_resource type="Shader" path="res://shaders/main_menu.gdshader" id="1_t6rgv"]
+[ext_resource type="FontFile" uid="uid://bhk06qx0dfb4l" path="res://assets/fonts/upheavtt.ttf" id="1_wdf3k"]
+[ext_resource type="Texture2D" uid="uid://dkl0276ug7oos" path="res://assets/Brick Wall/wall_texture.jpg" id="2_c40xs"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_b8pfc"]
+shader = ExtResource("1_t6rgv")
+shader_parameter/Direction = Vector2(0.5, 0.5)
+shader_parameter/Speed = 0.08
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8mb4u"]
+texture = ExtResource("2_c40xs")
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+modulate_color = Color(0.466181, 0.466181, 0.466181, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_6pbhe"]
+region_rect = Rect2(131, 328, 513, 202)
+modulate_color = Color(0.381703, 0.381703, 0.381703, 1)
+
+[node name="OptionsScene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_6nyhh")
+
+[node name="Panel" type="Panel" parent="."]
+texture_repeat = 2
+material = SubResource("ShaderMaterial_b8pfc")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_8mb4u")
+metadata/_edit_lock_ = true
+
+[node name="Panel2" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -314.5
+offset_top = -173.0
+offset_right = 314.5
+offset_bottom = 173.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxTexture_6pbhe")
+
+[node name="Container" type="BoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Container"]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+theme_override_constants/separation = 30
+
+[node name="ModeOption" type="OptionButton" parent="Container/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_wdf3k")
+theme_override_font_sizes/font_size = 50
+alignment = 2
+selected = 0
+allow_reselect = true
+item_count = 2
+popup/item_0/text = "2D"
+popup/item_1/text = "3D"
+popup/item_1/id = 1
+
+[node name="MapSizeOption" type="OptionButton" parent="Container/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_wdf3k")
+theme_override_font_sizes/font_size = 50
+alignment = 2
+selected = 0
+allow_reselect = true
+item_count = 3
+popup/item_0/text = "5 Cells"
+popup/item_1/text = "11 Cells"
+popup/item_1/id = 1
+popup/item_2/text = "21 Cells"
+popup/item_2/id = 2
+
+[node name="RLButton" type="CheckButton" parent="Container/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_wdf3k")
+theme_override_font_sizes/font_size = 50
+text = "IS RL CONTROL"
+
+[node name="AlgoButton" type="CheckButton" parent="Container/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_wdf3k")
+theme_override_font_sizes/font_size = 50
+text = "IS USING ALGO"
+
+[node name="FourWallButton" type="CheckButton" parent="Container/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_wdf3k")
+theme_override_font_sizes/font_size = 50
+text = "four walls"
+
+[connection signal="item_selected" from="Container/VBoxContainer/ModeOption" to="." method="_on_mode_option_item_selected"]
+[connection signal="item_selected" from="Container/VBoxContainer/MapSizeOption" to="." method="_on_map_size_option_item_selected"]
+[connection signal="toggled" from="Container/VBoxContainer/RLButton" to="." method="_on_check_button_toggled"]
+[connection signal="toggled" from="Container/VBoxContainer/AlgoButton" to="." method="_on_algo_button_toggled"]
+[connection signal="toggled" from="Container/VBoxContainer/FourWallButton" to="." method="_on_four_wall_button_toggled"]

@@ -8,3 +8,6 @@ signal found_solution(solution)
 signal process_solution()
 signal received_reward(point)
 signal penalty
+signal game_over
+signal on_wall
+signal ai_move(steps)
