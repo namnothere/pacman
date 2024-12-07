@@ -36,6 +36,8 @@ func _ready() -> void:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	if Global.is_algo == false and Global.is_topdown_active == false:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	if Global.is_algo == true:
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	#visuals.scale = Vector3(CHARACTER_SCALE, CHARACTER_SCALE, CHARACTER_SCALE)
 
 func _on_game_over():
