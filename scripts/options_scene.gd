@@ -38,3 +38,7 @@ func _on_check_button_toggled(toggled_on: bool) -> void:
 func _on_algo_button_toggled(toggled_on: bool) -> void:
 	print("toggle algo: ", toggled_on)
 	Global.is_algo = toggled_on
+
+
+func _on_four_wall_button_toggled(toggled_on: bool) -> void:
+	Global.is_four_wall_only = toggled_on

@@ -22,19 +22,19 @@ var is_first_person: bool = false
 var is_auto: bool = false
 
 func _ready() -> void:
-	is_first_person = bool(top_down_camera.current == false)
+	is_first_person = bool(Global.is_topdown_active == false)
 	is_ai_control = Global.is_ai_control
 	#scale = Vector3(CHARACTER_SCALE, CHARACTER_SCALE, CHARACTER_SCALE)
 
 	print("is_first_person: ", is_first_person)
 	if is_first_person:
-		CHARACTER_SCALE = 1
+		CHARACTER_SCALE = 2
 	if is_ai_control:
 		Signals.connect("game_over", _on_game_over)
 		ai_controller.init(self)
 	if is_first_person and is_ai_control == false:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	if Global.is_algo == false:
+	if Global.is_algo == false and Global.is_topdown_active == false:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	#visuals.scale = Vector3(CHARACTER_SCALE, CHARACTER_SCALE, CHARACTER_SCALE)
 
@@ -47,7 +47,7 @@ func _input(event: InputEvent):
 		var MouseEvent = event.relative * mouse_sensitivity
 		camera_look(MouseEvent)
 	
-	if event is InputEventMouseMotion and Global.is_algo == false:
+	if event is InputEventMouseMotion and Global.is_algo == false and Global.is_topdown_active == false:
 		var MouseEvent = event.relative * mouse_sensitivity
 		camera_look(MouseEvent)
 	
@@ -89,9 +89,10 @@ func camera_fixed_at(direction: Vector2):
 func _physics_process(_delta: float) -> void:
 	
 	if is_on_wall():
-		Signals.emit_signal("on_wall")
+		#Signals.emit_signal("on_wall")
+		ai_controller.reward -= 1
+		ai_controller.reset()
 	else:
-		#print("valid")
 		pass
 
 	if is_ai_control:

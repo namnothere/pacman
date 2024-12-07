@@ -110,7 +110,14 @@ theme_override_fonts/font = ExtResource("1_wdf3k")
 theme_override_font_sizes/font_size = 50
 text = "IS USING ALGO"
 
+[node name="FourWallButton" type="CheckButton" parent="Container/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_wdf3k")
+theme_override_font_sizes/font_size = 50
+text = "four walls"
+
 [connection signal="item_selected" from="Container/VBoxContainer/ModeOption" to="." method="_on_mode_option_item_selected"]
 [connection signal="item_selected" from="Container/VBoxContainer/MapSizeOption" to="." method="_on_map_size_option_item_selected"]
 [connection signal="toggled" from="Container/VBoxContainer/RLButton" to="." method="_on_check_button_toggled"]
 [connection signal="toggled" from="Container/VBoxContainer/AlgoButton" to="." method="_on_algo_button_toggled"]
+[connection signal="toggled" from="Container/VBoxContainer/FourWallButton" to="." method="_on_four_wall_button_toggled"]

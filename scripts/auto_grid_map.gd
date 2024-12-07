@@ -11,6 +11,7 @@ const PELLET: int = 1
 const PLAYER: int = 2
 const SCALE_FACTOR: Vector3 = Vector3(4, 4, 4)
 var tween: Tween
+var is_four_walls: bool = true
 const Pellet: PackedScene = preload("res://scenes/pellet.tscn")
 
 @export var MAP_SIZE: int = 5
@@ -29,13 +30,18 @@ const Pellet: PackedScene = preload("res://scenes/pellet.tscn")
 func _ready() -> void:
 	Signals.connect("found_solution", _on_found_solution)
 	MAP_SIZE = Global.MAP_SIZE
+	is_four_walls = Global.is_four_wall_only
 	topdowncamera.set_current(Global.is_topdown_active)
 	
 	var pellet_map;
 	if is_auto_map:
 		grid_map.clear()
 		init_map()
-		dfs_maze_generate()
+		if is_four_walls == false:
+			dfs_maze_generate()
+		else:
+			four_wall_generate()
+		Global.grid = grid
 		generate_grid()
 		pellet_map = spawn_pellets()
 		spawn_player_at_random()
@@ -53,7 +59,8 @@ func _ready() -> void:
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
-	pass
+	if is_instance_valid(Global.target_pellet) == false:
+		_on_received_reward(0)
 	
 func init_map():
 	for i in range(MAP_SIZE):
@@ -112,8 +119,6 @@ func dfs_maze_generate(start_x: int = 1, start_y: int = 1):
 			stack.append(next)
 		else:
 			stack.pop_back()
-			
-	Global.grid = grid
 
 func is_valid_move(x: int, y: int):
 	return x >= 0 and x < MAP_SIZE and y > 0 and y < MAP_SIZE and grid[y][x] == WALL
@@ -210,7 +215,7 @@ func move_to_next_step(steps_array):
 		await move_to_next_step(steps_array)
 
 	else:
-		print("Character has reached the goal!")
+		#print("Character has reached the goal!")
 		penalty_timer.stop()
 		Signals.emit_signal("game_over")
 
@@ -273,11 +278,27 @@ func _on_penalty_timer_timeout() -> void:
 	
 func _on_received_reward(_point):
 	Global.target_pellet = get_tree().get_first_node_in_group("pellet")
+	if not Global.target_pellet:
+		return
 	print("Retrieve next target")
 	
 func _on_ai_move(steps):
 	move_to_next_step(steps)
 	Global.player_pos = steps[0]
 	
-	
-	
+func four_wall_generate():
+	for ny in range(1, Global.MAP_SIZE - 1):
+		for nx in range(1, Global.MAP_SIZE - 1):
+			grid[ny][nx] = FLOOR
+
+	# add random walls
+	#var wall_density = 0.1
+	#for ny in range(1, Global.MAP_SIZE - 1):
+		#for nx in range(1, Global.MAP_SIZE - 1):
+			#if randf() < wall_density:
+				#grid[ny][nx] = WALL
+
+func _input(event: InputEvent):
+	if Input.is_action_just_pressed("ui_text_backspace"):
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
